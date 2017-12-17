@@ -810,11 +810,17 @@ typedef NS_ENUM(NSInteger, PanDirection){
             if (self.cellPlayerOnCenter) {
                 if ([self.scrollView isKindOfClass:[UITableView class]]) {
                     UITableView *tableView = (UITableView *)self.scrollView;
-                    [tableView scrollToRowAtIndexPath:self.indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+                    if ([tableView numberOfSections] > self.indexPath.section &&
+                        [tableView numberOfRowsInSection:self.indexPath.section] > self.indexPath.row) {
+                        [tableView scrollToRowAtIndexPath:self.indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+                    }
 
                 } else if ([self.scrollView isKindOfClass:[UICollectionView class]]) {
                     UICollectionView *collectionView = (UICollectionView *)self.scrollView;
-                    [collectionView scrollToItemAtIndexPath:self.indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+                    if ([collectionView numberOfSections] > self.indexPath.section &&
+                        [collectionView numberOfItemsInSection:self.indexPath.row]) {
+                        [collectionView scrollToItemAtIndexPath:self.indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+                    }
                 }
             }
             [self.brightnessView removeFromSuperview];
